@@ -1463,6 +1463,7 @@ function handleDetailsWindowEvent(event, eventType, savedScrollPosition) {
 	const [detailsWindow, detailsWindowBox] = [$("#detailsWindow"), $("#detailsWindowBox")];
 
 	let [detailsLeft, detailsTop] = [readCookie("detailsLeft", 0), readCookie("detailsTop", 0)];
+
 	let [detailsWidth, detailsHeight] = [readCookie("detailsWidth", 160), readCookie("detailsHeight", 160)];
 	if (eventType == "drag") {
 		[detailsLeft, detailsTop] = [event.rect.left, event.rect.top];
@@ -1494,8 +1495,8 @@ function handleDetailsWindowEvent(event, eventType, savedScrollPosition) {
 			"height": detailsWindow.data("no-resize") ? "" : detailsWindowChildrenLength > 0 ? detailsHeight : 170
 		})
 		.css({
-			"left": Math.max(Math.min(detailsLeft, curWidth - detailsWindow.outerWidth(true)), 0),
-			"top": Math.max(Math.min(detailsTop, curHeight - detailsWindow.outerHeight(true)), 0)
+			"left": Math.max(Math.min(detailsLeft, window.innerWidth - detailsWindow.outerWidth(true)), 0),
+			"top": Math.max(Math.min(detailsTop, window.innerHeight - detailsWindow.outerHeight(true)), 0)
 		});
 
 	if (detailsWindow.outerWidth(true) > 500) {
@@ -4867,7 +4868,7 @@ function drawAllNodes() {
 	}
 }
 function drawTooltip(curNode, forceDraw) {
-	const clampRenderScale = Math.min(1, (window.innerWidth - 40) / tooltipWidth) * pixiTooltipZoomLevel;
+	const clampRenderScale = Math.min(1, (window.innerWidth - 40) / tooltipWidth) * pixiTooltipZoomLevel * 0.75;
 	const clampScale = clampRenderScale / stageScale;
 	const scaleFactor = devicePixelRatio >= 2 ? 1 : (clampRenderScale >= 0.45 ? 2 : 1) / devicePixelRatio * clampRenderScale;
 
@@ -5446,13 +5447,13 @@ function rebuildCanvas() {
 }
 function resizeCanvas() {
 	$("#header, #footer").css("display", window.innerHeight < 400 ? "none" : "block");
-	let [newWidth, newHeight] = [window.innerWidth, window.innerHeight];
+	let [newWidth, newHeight] = [$("#canvasContainer").width(), $("#canvasContainer").height()];
 	if (curWidth != newWidth || curHeight != newHeight) {
 		const offsetTop = $("#header").outerHeight(true);
 		const offsetBottom = $("#extraInfo").outerHeight(true) + $("#extraButtons1").outerHeight(true) + $("#extraButtons2").outerHeight(true) + $("#footer").outerHeight(true);
 
-		pixiJS.renderer.resize(minCanvasWidth, minCanvasHeight);
-		[newWidth, newHeight] = [window.innerWidth, window.innerHeight];
+		// pixiJS.renderer.resize(minCanvasWidth, minCanvasHeight);
+		[newWidth, newHeight] = [$("#canvasContainer").width(), $("#canvasContainer").height()];
 		pixiJS.renderer.resize(newWidth, newHeight);
 
 		for (let i = 0, n = pixiJS.stage.children.length; i < n; i++) {
@@ -5465,7 +5466,7 @@ function resizeCanvas() {
 		if (pixiTooltip.children.length > 0) drawTooltip(pixiNodes[pixiTooltip.nodeIndex]);
 
 		if ($("#extraButtons2").width() > 0) $("#extraInfo").outerWidth(Math.floor($("#extraButtons2").outerWidth() - 5));
-		$("body").css({"width": newWidth, "height": newHeight }); // prevent undesirable mobile scrolling
+		// $("body").css({"width": newWidth, "height": newHeight }); // prevent undesirable mobile scrolling
 		resetFrameTimer();
 		applyZoomLevel();
 		resizeSearchInput();
@@ -5515,6 +5516,7 @@ $(document).ready(function() {
 	$("#sorcererSelect").on("click", () => $("#classSelector").val("sorcerer").change());
 	$("#groupSelector").on("change", handleGroupSelection);
 	$("#searchInput").on("keyup focus blur", handleSearchInput);
+	$("#canvasContainer").on("wheel", ($event) => $event.preventDefault());
 
 	interact("#detailsWindow")
 		.resizable({

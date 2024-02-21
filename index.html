@@ -15,14 +15,14 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" type="text/css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.css" type="text/css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icons/7.1.0/css/flag-icons.min.css" type="text/css">
-	<link rel="stylesheet" href="/d4/build-calculator/main.css" type="text/css">
-	<link rel="modulepreload" href="/d4/build-calculator/data/barbarian.js">
-	<link rel="modulepreload" href="/d4/build-calculator/data/druid.js">
-	<link rel="modulepreload" href="/d4/build-calculator/data/necromancer.js">
-	<link rel="modulepreload" href="/d4/build-calculator/data/rogue.js">
-	<link rel="modulepreload" href="/d4/build-calculator/data/sorcerer.js">
-	<link rel="modulepreload" href="/d4/build-calculator/data/paragon.js">
-	<link rel="modulepreload" href="/d4/build-calculator/data/codex-of-power.js">
+	<link rel="stylesheet" href="main.css" type="text/css">
+	<link rel="modulepreload" href="data/barbarian.js">
+	<link rel="modulepreload" href="data/druid.js">
+	<link rel="modulepreload" href="data/necromancer.js">
+	<link rel="modulepreload" href="data/rogue.js">
+	<link rel="modulepreload" href="data/sorcerer.js">
+	<link rel="modulepreload" href="data/paragon.js">
+	<link rel="modulepreload" href="data/codex-of-power.js">
 	<script defer src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<script defer src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/js/select2.min.js"></script>
 	<script defer src="https://cdnjs.cloudflare.com/ajax/libs/interact.js/1.10.26/interact.min.js"></script>
@@ -30,72 +30,78 @@
 	<script defer src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.4.0/pixi.min.js"></script>
 </head>
 <body>
-	<div id="fadeOverlay" class="disabled"></div>
-	<div id="detailsWindow" class="disabled">
-		<div id="detailsWindowHeader"><span id="detailsWindowTitle">Details</span><img id="detailsWindowToggle" src="images/collapse.svg"></div>
-		<div id="detailsWindowContents"></div>
-	</div>
-	<div id="canvasContainer"></div>
-	<div id="header">
-		<h1><a href="#" target="_blank">Diablo IV Build Calculator</a><div id="versionLabel" class="disabled"></div></h1>
-		<h2 class="disabled"><span id="className"></span><span id="pointsLabel"></span><span id="errorLabel"></span></h2>
-	</div>
-	<div id="floatLeft">
-		<select name="localeSelector" id="localeSelector" class="disabled">
-			<option value="deDE">Deutsch&nbsp;[deDE]</option>
-			<option value="enUS">English&nbsp;[enUS]</option>
-			<option value="esES">Español&nbsp;[esES]</option>
-			<option value="esMX">Español&nbsp;[esMX]</option>
-			<option value="frFR">Français&nbsp;[frFR]</option>
-			<option value="itIT">Italiano&nbsp;[itIT]</option>
-			<option value="jaJP">日本語&nbsp;[jaJP]</option>
-			<option value="koKR">한국어&nbsp;[koKR]</option>
-			<option value="plPL">Polski&nbsp;[plPL]</option>
-			<option value="ptBR">Português&nbsp;[ptBR]</option>
-			<option value="ruRU">Русский&nbsp;[ruRU]</option>
-			<option value="trTR">Türkçe&nbsp;[trTR]</option>
-			<option value="zhCN">简体中文&nbsp;[zhCN]</option>
-			<option value="zhTW">繁體中文&nbsp;[zhTW]</option>
-		</select>
-	</div>
-	<div id="flexContainer">
-		<span id="classSelectBox" class="disabled">
-			<span id="barbarianSelect">[Barbarian]</span>
-			<span id="druidSelect">[Druid]</span>
-			<span id="necromancerSelect">[Necromancer]</span>
-			<span id="rogueSelect">[Rogue]</span>
-			<span id="sorcererSelect">[Sorcerer]</span>
-		</span>
-		<span id="modalBox" class="disabled"></span>
-	</div>
-	<div id="extraFooter">
-		<div id="extraInfo" class="disabled">
-			<a href="./database/" target="_blank">Click here if you're looking for datamined information.</a>
+	<header class="entry-header">
+		<h1 class="entry-title"><a href="#" target="_blank">Diablo IV Build Calculator</a></h1>
+		<!-- <div id="versionLabel" class="disabled"></div> -->
+		<!-- <h2 class="disabled"><span id="className"></span><span id="pointsLabel"></span><span id="errorLabel"></span></h2> -->
+	</header>
+
+	<div class="calc-wrapper">
+		<div id="fadeOverlay" class="disabled"></div>
+		<div id="detailsWindow" class="disabled">
+			<div id="detailsWindowHeader"><span id="detailsWindowTitle">Details</span><img id="detailsWindowToggle" src="images/collapse.svg"></div>
+			<div id="detailsWindowContents"></div>
 		</div>
-		<div id="extraButtons1" class="disabled">
-			<select id="classSelector">
-				<option value="none">None</option>
-				<option value="barbarian">Barbarian</option>
-				<option value="druid">Druid</option>
-				<option value="necromancer">Necromancer</option>
-				<option value="rogue">Rogue</option>
-				<option value="sorcerer">Sorcerer</option>
-			</select>
-			<select id="groupSelector" class="disabled"></select>
-			<input id="searchInput" type="text" autocomplete="off" placeholder="Search.." class="disabled">
+		<div id="canvasContainer">
+			<div id="floatLeft">
+				<select name="localeSelector" id="localeSelector" class="disabled">
+					<option value="deDE">Deutsch&nbsp;[deDE]</option>
+					<option value="enUS">English&nbsp;[enUS]</option>
+					<option value="esES">Español&nbsp;[esES]</option>
+					<option value="esMX">Español&nbsp;[esMX]</option>
+					<option value="frFR">Français&nbsp;[frFR]</option>
+					<option value="itIT">Italiano&nbsp;[itIT]</option>
+					<option value="jaJP">日本語&nbsp;[jaJP]</option>
+					<option value="koKR">한국어&nbsp;[koKR]</option>
+					<option value="plPL">Polski&nbsp;[plPL]</option>
+					<option value="ptBR">Português&nbsp;[ptBR]</option>
+					<option value="ruRU">Русский&nbsp;[ruRU]</option>
+					<option value="trTR">Türkçe&nbsp;[trTR]</option>
+					<option value="zhCN">简体中文&nbsp;[zhCN]</option>
+					<option value="zhTW">繁體中文&nbsp;[zhTW]</option>
+				</select>
+			</div>
+			<div id="flexContainer">
+			<span id="classSelectBox" class="disabled">
+				<span id="barbarianSelect">[Barbarian]</span>
+				<span id="druidSelect">[Druid]</span>
+				<span id="necromancerSelect">[Necromancer]</span>
+				<span id="rogueSelect">[Rogue]</span>
+				<span id="sorcererSelect">[Sorcerer]</span>
+			</span>
+				<span id="modalBox" class="disabled"></span>
+			</div>
 		</div>
-		<div id="extraButtons2" class="disabled">
-			<button id="menuButton" type="button">Open Menu</button>
-			<button id="resetButton" type="button">Reset</button>
-			<button id="saveButton" type="button">Save</button>
-			<button id="reloadButton" type="button">Reload</button>
-			<button id="copyButton" type="button">Copy URL</button>
-			<button id="databaseButton" type="button" onclick="window.open('./database/')">Open DB</button>
+		<div id="extraFooter">
+			<div id="extraButtons1" class="disabled">
+				<select id="classSelector">
+					<option value="none">None</option>
+					<option value="barbarian">Barbarian</option>
+					<option value="druid">Druid</option>
+					<option value="necromancer">Necromancer</option>
+					<option value="rogue">Rogue</option>
+					<option value="sorcerer">Sorcerer</option>
+				</select>
+				<select id="groupSelector" class="disabled"></select>
+				<input id="searchInput" type="text" autocomplete="off" placeholder="Search.." class="disabled">
+			</div>
+			<div id="extraButtons2" class="disabled">
+				<button id="menuButton" type="button">Open Menu</button>
+				<button id="resetButton" type="button">Reset</button>
+				<button id="saveButton" type="button">Save</button>
+				<button id="reloadButton" type="button">Reload</button>
+				<button id="copyButton" type="button">Copy URL</button>
+				<button id="databaseButton" type="button" onclick="window.open('./database/')">Open DB</button>
+			</div>
+		</div>
+		<div id="footer">
+			<div id="footerText">
+				Made by <a href="https://github.com/lothrik" target="_blank">Lothrik</a>
+				(<a href="https://github.com/lothrik/diablo4-build-calc" target="_blank">Original Source Code</a>, <a href="https://patreon.com/lothrik" target="_blank">Patreon</a>).
+				<a href="https://github.com/lexicongaming/diablo4-build-calc" target="_blank">Modified Source Code</a>.
+			</div>
 		</div>
 	</div>
-	<div id="footer">
-		<div id="footerText">Diablo IV &copy; 2023 <a href="https://diablo4.blizzard.com" target="_blank">Blizzard Entertainment</a>. Website by <a href="https://github.com/lothrik" target="_blank">Lothrik</a>. <a href="https://github.com/lothrik/diablo4-build-calc" target="_blank">Source Code</a>. <a href="https://patreon.com/lothrik" target="_blank">Patreon</a>.</div>
-	</div>
-	<script defer src="/d4/build-calculator/main.js" type="module"></script>
+	<script defer src="main.js" type="module"></script>
 </body>
 </html>

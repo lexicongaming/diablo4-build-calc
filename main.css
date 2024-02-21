@@ -164,12 +164,18 @@ h1, h2, h3 {
 }
 
 #canvasContainer {
-	position: fixed;
-	left: 0;
-	top: 0;
-	width: 100vw;
-	height: 100vh;
+	position: relative;
+	width: 100%;
+	height: 600px;
 	text-align: left;
+}
+
+.calc-wrapper {
+	border-radius: 12px;
+	background: rgba(19, 20, 22, .8);
+	padding: 10px;
+	box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
+	box-sizing: border-box;
 }
 
 #header {
@@ -217,6 +223,9 @@ h1, h2, h3 {
 }
 
 #floatLeft {
+	top: 0;
+	left: 0;
+	position: absolute;
 	max-width: 160px;
 	margin: 4px;
 }
@@ -255,12 +264,12 @@ h1, h2, h3 {
 }
 
 #flexContainer {
-	display: flex;
-	position: fixed;
+	position: absolute;
 	left: 0;
-	top: 0;
-	width: 100vw;
-	height: 100vh;
+	right: 0;
+	display: flex;
+	width: 100%;
+	height: 100%;
 	align-items: center;
 	justify-content: center;
 	pointer-events: none;
@@ -330,6 +339,15 @@ h1, h2, h3 {
 	display: flex;
 	margin: auto auto 0;
 	flex-direction: column;
+}
+
+#extraFooter input {
+	padding-top: 0 !important;
+	padding-bottom: 0 !important;
+}
+
+#extraFooter button, #extraFooter select {
+	color: white !important;
 }
 
 #extraInfo {
