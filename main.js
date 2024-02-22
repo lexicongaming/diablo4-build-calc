@@ -1284,11 +1284,11 @@ function handleZoomButton(event) {
 function applyZoomLevel() {
 	let zoomLevel = Number(readCookie("zoomLevel", 1));
 
-	if (window.innerWidth < 450 * zoomLevel && zoomLevel > 1) zoomLevel = Math.max(window.innerWidth / 450, 1);
+	if ($("#canvasContainer").width() < 450 * zoomLevel && zoomLevel > 1) zoomLevel = Math.max($("#canvasContainer").width() / 450, 1);
 	if (isNaN(zoomLevel) || zoomLevel < 0.25 || zoomLevel > 4) zoomLevel = 1;
 
 	$("#extraFooter").css({ "transform": `scale(${Math.max(zoomLevel, 1)})`, "transform-origin": "center bottom" });
-	$("#modalBox .select2-container").width((window.innerWidth * 0.9 - 22));
+	$("#modalBox .select2-container").width(($("#canvasContainer").width() * 0.9 - 22));
 
 	const zoomLevelTooltip = Number(readCookie("zoomLevelTooltip", 1));
 	if (!isNaN(zoomLevel) && zoomLevel >= 0.25 && zoomLevel <= 4) pixiTooltipZoomLevel = zoomLevelTooltip;
@@ -1636,33 +1636,38 @@ function handleCanvasEvent(event) {
 	}
 
 	if (event.type == "wheel" || (event.type == "touchmove" && isTouching)) {
-		if (event.type == "wheel") {
-			const stepSize = pixiJS.stage.scale.x >= 1.5 ? 0.1 : 0.05;
-			if (event.originalEvent.deltaY < 0) {
-				stageScale = Math.round((pixiJS.stage.scale.x + stepSize) * 100) / 100;
-			} else if (event.originalEvent.deltaY > 0) {
-				stageScale = Math.round((pixiJS.stage.scale.x - stepSize) * 100) / 100;
-			}
-		} else {
-			stageScale = Math.hypot(
-				event.originalEvent.touches[0].offsetX - event.originalEvent.touches[1].offsetX,
-				event.originalEvent.touches[0].offsetY - event.originalEvent.touches[1].offsetY)
-				* initialScale / initialTouchDistance;
-		}
-		if (stageScale >= pixiScalingFloor && stageScale <= pixiScalingCeiling) {
+		const select2Open = $("#modalBox:not(.disabled)").length > 0;
+		if (!select2Open) {
 			if (event.type == "wheel") {
-				pixiJS.stage.pivot.x = Math.round(event.offsetX / pixiJS.stage.scale.x + pixiJS.stage.pivot.x - event.offsetX / stageScale);
-				pixiJS.stage.pivot.y = Math.round(event.offsetY / pixiJS.stage.scale.y + pixiJS.stage.pivot.y - event.offsetY / stageScale);
+				const stepSize = pixiJS.stage.scale.x >= 1.5 ? 0.1 : 0.05;
+				if (event.originalEvent.deltaY < 0) {
+					stageScale = Math.round((pixiJS.stage.scale.x + stepSize) * 100) / 100;
+				} else if (event.originalEvent.deltaY > 0) {
+					stageScale = Math.round((pixiJS.stage.scale.x - stepSize) * 100) / 100;
+				}
 			} else {
-				const averageX = (event.originalEvent.touches[0].offsetX + event.originalEvent.touches[1].offsetX) * 0.5;
-				const averageY = (event.originalEvent.touches[0].offsetY + event.originalEvent.touches[1].offsetY) * 0.5;
-				pixiJS.stage.pivot.x = Math.round(averageX / pixiJS.stage.scale.x + pixiJS.stage.pivot.x - averageX / stageScale);
-				pixiJS.stage.pivot.y = Math.round(averageY / pixiJS.stage.scale.y + pixiJS.stage.pivot.y - averageY / stageScale);
+				stageScale = Math.hypot(
+						event.originalEvent.touches[0].offsetX - event.originalEvent.touches[1].offsetX,
+						event.originalEvent.touches[0].offsetY - event.originalEvent.touches[1].offsetY)
+					* initialScale / initialTouchDistance;
 			}
-			pixiJS.stage.scale.set(stageScale);
-			if (pixiTooltip.children.length > 0) drawTooltip(pixiNodes[pixiTooltip.nodeIndex]);
-		} else {
-			stageScale = pixiJS.stage.scale.x;
+			if (stageScale >= pixiScalingFloor && stageScale <= pixiScalingCeiling) {
+				if (event.type == "wheel") {
+					pixiJS.stage.pivot.x = Math.round(event.offsetX / pixiJS.stage.scale.x + pixiJS.stage.pivot.x - event.offsetX / stageScale);
+					pixiJS.stage.pivot.y = Math.round(event.offsetY / pixiJS.stage.scale.y + pixiJS.stage.pivot.y - event.offsetY / stageScale);
+				} else {
+					const averageX = (event.originalEvent.touches[0].offsetX + event.originalEvent.touches[1].offsetX) * 0.5;
+					const averageY = (event.originalEvent.touches[0].offsetY + event.originalEvent.touches[1].offsetY) * 0.5;
+					pixiJS.stage.pivot.x = Math.round(averageX / pixiJS.stage.scale.x + pixiJS.stage.pivot.x - averageX / stageScale);
+					pixiJS.stage.pivot.y = Math.round(averageY / pixiJS.stage.scale.y + pixiJS.stage.pivot.y - averageY / stageScale);
+				}
+				pixiJS.stage.scale.set(stageScale);
+				if (pixiTooltip.children.length > 0) drawTooltip(pixiNodes[pixiTooltip.nodeIndex]);
+			} else {
+				stageScale = pixiJS.stage.scale.x;
+			}
+
+			event.preventDefault();
 		}
 	}
 
@@ -1773,12 +1778,12 @@ function handleSearchInput(event) {
 	}
 	oldSearchText = newSearchText;
 
-	if (event.type == "blur" || nodeCount == 0) {
+	/* if (event.type == "blur" || nodeCount == 0) {
 		const extraInfoHTML = $("#extraInfo").html();
 		if ([MATCH_FOUND_TEXT, MATCHES_FOUND_TEXT].some(matchText => extraInfoHTML.includes(matchText))) closeExtraInfo();
 	} else {
 		$("#extraInfo").html("<span>" + nodeCount + (nodeCount == 1 ? MATCH_FOUND_TEXT : MATCHES_FOUND_TEXT) + "`" + newSearchText + "`.</span>").removeClass("disabled");
-	}
+	} */
 }
 function handleMenuButton(event) {
 	if ($("#menuButton").text() == OPEN_MENU_TEXT) {
@@ -5516,7 +5521,6 @@ $(document).ready(function() {
 	$("#sorcererSelect").on("click", () => $("#classSelector").val("sorcerer").change());
 	$("#groupSelector").on("change", handleGroupSelection);
 	$("#searchInput").on("keyup focus blur", handleSearchInput);
-	$("#canvasContainer").on("wheel", ($event) => $event.preventDefault());
 
 	interact("#detailsWindow")
 		.resizable({
@@ -5539,7 +5543,7 @@ $(document).ready(function() {
 	$(window).on("select2:open", e => {
 		const container = $(e.target).parent();
 		const position = container.offset().top;
-		const availableHeight = $(window).height() - position - container.outerHeight();
+		const availableHeight = $("#canvasContainer").height() - position - container.outerHeight();
 		$(".select2-results__options").css("max-height", availableHeight - 80);
 		if (e.target.id == "localeSelector") {
 			$("#floatLeft, #floatLeft .select2-container").width(160);
