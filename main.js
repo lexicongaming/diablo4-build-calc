@@ -1462,7 +1462,7 @@ function updateDetailsWindow() {
 function handleDetailsWindowEvent(event, eventType, savedScrollPosition) {
 	const [detailsWindow, detailsWindowBox] = [$("#detailsWindow"), $("#detailsWindowBox")];
 
-	let [detailsLeft, detailsTop] = [readCookie("detailsLeft", 0), readCookie("detailsTop", 0)];
+	let [detailsLeft, detailsTop] = [readCookie("detailsLeft", 15), readCookie("detailsTop", 130)];
 
 	let [detailsWidth, detailsHeight] = [readCookie("detailsWidth", 160), readCookie("detailsHeight", 160)];
 	if (eventType == "drag") {
