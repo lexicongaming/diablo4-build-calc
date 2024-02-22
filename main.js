@@ -1645,17 +1645,17 @@ function handleCanvasEvent(event) {
 			}
 		} else {
 			stageScale = Math.hypot(
-				event.originalEvent.touches[0].clientX - event.originalEvent.touches[1].clientX,
-				event.originalEvent.touches[0].clientY - event.originalEvent.touches[1].clientY)
+				event.originalEvent.touches[0].offsetX - event.originalEvent.touches[1].offsetX,
+				event.originalEvent.touches[0].offsetY - event.originalEvent.touches[1].offsetY)
 				* initialScale / initialTouchDistance;
 		}
 		if (stageScale >= pixiScalingFloor && stageScale <= pixiScalingCeiling) {
 			if (event.type == "wheel") {
-				pixiJS.stage.pivot.x = Math.round(event.clientX / pixiJS.stage.scale.x + pixiJS.stage.pivot.x - event.clientX / stageScale);
-				pixiJS.stage.pivot.y = Math.round(event.clientY / pixiJS.stage.scale.y + pixiJS.stage.pivot.y - event.clientY / stageScale);
+				pixiJS.stage.pivot.x = Math.round(event.offsetX / pixiJS.stage.scale.x + pixiJS.stage.pivot.x - event.offsetX / stageScale);
+				pixiJS.stage.pivot.y = Math.round(event.offsetY / pixiJS.stage.scale.y + pixiJS.stage.pivot.y - event.offsetY / stageScale);
 			} else {
-				const averageX = (event.originalEvent.touches[0].clientX + event.originalEvent.touches[1].clientX) * 0.5;
-				const averageY = (event.originalEvent.touches[0].clientY + event.originalEvent.touches[1].clientY) * 0.5;
+				const averageX = (event.originalEvent.touches[0].offsetX + event.originalEvent.touches[1].offsetX) * 0.5;
+				const averageY = (event.originalEvent.touches[0].offsetY + event.originalEvent.touches[1].offsetY) * 0.5;
 				pixiJS.stage.pivot.x = Math.round(averageX / pixiJS.stage.scale.x + pixiJS.stage.pivot.x - averageX / stageScale);
 				pixiJS.stage.pivot.y = Math.round(averageY / pixiJS.stage.scale.y + pixiJS.stage.pivot.y - averageY / stageScale);
 			}
