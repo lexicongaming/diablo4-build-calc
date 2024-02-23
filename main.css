@@ -33,31 +33,28 @@
 	scrollbar-color: #454a4d #202324;
 }
 
-body {
+.calc-wrapper {
 	color: #fff;
 	font: 20px/23px Homenaje, Calibri, Arial, Helvetica, sans-serif;
 	display: flex;
 	flex-direction: column;
-	height: 100vh;
 	text-align: center;
-	background: #000 url(images/background.avif) repeat;
-	background-size: 2000px;
 	-webkit-tap-highlight-color: transparent;
 }
 
-body > * {
+.calc-wrapper > * {
 	-webkit-tap-highlight-color: initial;
 	user-select: none;
 }
 
 @media (min-resolution: 2dppx) {
-	body {
+	.calc-wrapper {
 		background-size: 1000px;
 	}
 }
 
 @media (min-resolution: 4dppx) {
-	body {
+	.calc-wrapper {
 		background-size: 500px;
 	}
 }
@@ -70,7 +67,7 @@ body > * {
 	background-image: url(images/background.jpg);
 }
 
-body > :not(#canvasContainer) {
+.calc-wrapper > :not(#canvasContainer) {
 	z-index: 1;
 }
 

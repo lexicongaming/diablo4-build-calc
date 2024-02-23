@@ -1462,9 +1462,16 @@ function updateDetailsWindow() {
 function handleDetailsWindowEvent(event, eventType, savedScrollPosition) {
 	const [detailsWindow, detailsWindowBox] = [$("#detailsWindow"), $("#detailsWindowBox")];
 
-	let [detailsLeft, detailsTop] = [readCookie("detailsLeft", 15), readCookie("detailsTop", 130)];
-
+	let [detailsLeft, detailsTop] = [readCookie("detailsLeft", 0), readCookie("detailsTop", 0)]; // 15, 130
 	let [detailsWidth, detailsHeight] = [readCookie("detailsWidth", 160), readCookie("detailsHeight", 160)];
+
+	if (!detailsLeft && !detailsTop) {
+		const coords = $(".sidebar-main").offset();
+		if (coords) {
+			[detailsLeft, detailsTop] = [coords.left, coords.top + 20];
+		}
+	}
+
 	if (eventType == "drag") {
 		[detailsLeft, detailsTop] = [event.rect.left, event.rect.top];
 		writeCookie("detailsLeft", detailsLeft);
