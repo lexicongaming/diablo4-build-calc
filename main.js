@@ -1466,10 +1466,8 @@ function handleDetailsWindowEvent(event, eventType, savedScrollPosition) {
 	let [detailsWidth, detailsHeight] = [readCookie("detailsWidth", 160), readCookie("detailsHeight", 160)];
 
 	if (!detailsLeft && !detailsTop) {
-		const coords = $(".sidebar-main").offset();
-		if (coords) {
-			[detailsLeft, detailsTop] = [coords.left, coords.top + 20];
-		}
+		const coords = $("#canvasContainer").offset();
+		[detailsLeft, detailsTop] = [coords.left + $("#canvasContainer").width() + 20, coords.top];
 	}
 
 	if (eventType == "drag") {
